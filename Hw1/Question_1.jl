@@ -1,5 +1,18 @@
 using LinearAlgebra, Plots
 
+#Eigenvalue method
+
+# Compute the power method
+#   Input : 
+# A : Matrix studied
+# v : Starting vector
+# n : Number of iterations
+#   Output :
+# w : Eigenvector
+# lambda : Eigenvalue
+# err : Error between the eigenvalue approximated and the real eigenvalue
+# lambda_1 : maximum of eigenvalues
+# rate_list : Theorical error
 function power_method(A,v,n)
     
     eigvalss = eigvals(Symmetric(A))
@@ -25,12 +38,19 @@ function power_method(A,v,n)
     return w,lambda,err,lambda_1,rate_list
 end
 
-function plot_power_method(A,v,n)
-    w,lambda,err,lambda_1,lambda_test = power_method(A, v, n)
-    print(w,", ",lambda_1," and ",lambda)
-    plot(1:(n+1), [err,lambda_test], yscale=:log10, marker=[:o :none],color=[:blue :red],linestyle=[:solid :dash], xlabel="iteration", ylabel="err", legend=true,label=["observed" "theory"])
-end
 
+# Compute the inverse iteration
+#   Input : 
+# A : Matrix studied
+# v : Starting vector
+# mu : Starting eigvalue
+# n : Number of iterations
+#   Output :
+# w : Eigenvector
+# lambda : Eigenvalue
+# err : Error between the eigenvalue approximated and the real eigenvalue
+# lambda_2 : Eigevalue where the function converge if mu = 3.
+# rate_list : Theorical error
 function inverse_iteration(A,v,mu,n)
     lambda_2 = eigvals(Symmetric(A))[end-1]
     lambda_3 = eigvals(Symmetric(A))[end-2]
@@ -58,14 +78,18 @@ function inverse_iteration(A,v,mu,n)
     return w,lambda,err,lambda_2,rate_list
 end
 
-
-function plot_inverse_iteration(A,v,mu,n)
-    w,lambda,err,lambda_1,lambda_test = inverse_iteration(A, v, mu, n)
-    print(w,", ",lambda_1," and ",lambda)
-    plot(1:(n+1), [err,lambda_test], yscale=:log10, marker=[:o :none],color=[:blue :red],linestyle=[:solid :dash], xlabel="iteration", ylabel="err", legend=true,label=["observed" "theory"])
-end
-
-
+# Compute the rayleigh quotient iteration
+#   Input : 
+# A : Matrix studied
+# v : Starting vector
+# mu : Starting eigvalue
+# n : Number of iterations
+#   Output :
+# w : Eigenvector
+# lambda : Eigenvalue
+# err : Error between the eigenvalue approximated and the real eigenvalue
+# lambda_2 : Eigevalue where the function converge if mu = 3.
+# rate_list : Theorical error
 function rayleigh_quotient_iteration(A,v,mu,n)
     lambda_2 = eigvals(Symmetric(A))[end-1]
     lambda_3 = eigvals(Symmetric(A))[end-2]
@@ -93,12 +117,33 @@ function rayleigh_quotient_iteration(A,v,mu,n)
     return w,lambda,err,lambda_2,rate_list
 end
 
+# Plot
+
+#Plot rayleigh quotient iteration
 function plot_rayleigh_quotient_iteration(A,v,mu,n)
     w,lambda,err,lambda_1,lambda_test = rayleigh_quotient_iteration(A, v, mu, n)
     print(w,", ",lambda_1," and ",lambda)
     plot(1:(n+1), [err,lambda_test], yscale=:log10, marker=[:o :none],color=[:blue :red],linestyle=[:solid :dash], xlabel="iteration", ylabel="err", legend=true,label=["observed" "theory"])
 end
-A = [4.0 1.0 1.0; 1.0 3.0 0.0; 1.0 0.0 2.0]
+
+#Plot inverse iteration
+function plot_inverse_iteration(A,v,mu,n)
+    w,lambda,err,lambda_1,lambda_test = inverse_iteration(A, v, mu, n)
+    print(w,", ",lambda_1," and ",lambda)
+    plot(1:(n+1), [err,lambda_test], yscale=:log10, marker=[:o :none],color=[:blue :red],linestyle=[:solid :dash], xlabel="iteration", ylabel="err", legend=true,label=["observed" "theory"])
+end
+
+#Plot power method
+function plot_power_method(A,v,n)
+    w,lambda,err,lambda_1,lambda_test = power_method(A, v, n)
+    print(w,", ",lambda_1," and ",lambda)
+    plot(1:(n+1), [err,lambda_test], yscale=:log10, marker=[:o :none],color=[:blue :red],linestyle=[:solid :dash], xlabel="iteration", ylabel="err", legend=true,label=["observed" "theory"])
+end
+
+
+# Main
+
+A = [4.0 1.0 1.0; 1.5 3.0 0.0; 1.0 0.0 2.0]
 v = [1.0, 1.0, 1.0]
 n = 10
 mu = 3.0
