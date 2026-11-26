@@ -168,37 +168,66 @@ end
 Alpha =[1,100]
 M= [5,10,20,50,100]
 N=[200,500,1000]
-for alpha in Alpha 
-    for n in N 
-        A0 = sprand(n, n, 0.5)      
-        b = rand(n)
+
+#Faire la compilation avant pour eviter erreurs de temps d'execution
+n0 = 50
+alpha0 = 10
+m0= 5
+a0 = sprand(n0, n0, 0.5)      
+b0= rand(n0)
+a1 = a0 + alpha0 * I
+a1 = a1 / opnorm(a1,1)
+_,_= GMERS_Modified(a1,b0,m0)
+a1\b0
+
+
+
+for n in N 
+    A0 = sprand(n, n, 0.5)      
+    b = rand(n)
+    for alpha in Alpha
+        A = A0 + alpha * I
+        A = A / opnorm(A,1)
         for m in M 
-            A = A0 + alpha * I
-            A = A / opnorm(A,1)
-            time, residual_error = GMERS_Modified(A,b,m)
-            println("alpha: ", alpha, " n: ", n, " m: ", m, " time: ", time, " residual_error: ", residual_error)
-            
-           end
+            Time, Residual_error = 0, 0
+            for i in 1:10
+            t, residual_error = GMERS_Modified(A,b,m)
+            Time += t
+            Residual_error += residual_error
+            end
+            Time /= 10
+            Residual_error /= 10
+            println("alpha: ", alpha, " n: ", n, " m: ", m, " time: ", Time, " residual_error: ", Residual_error)  
+        end
         println()
     end
     println()
     println()
 end
 println("Backslash operator")
-for alpha in Alpha 
-    for n in N 
-        A0 = sprand(n, n, 0.5)      
-        b = rand(n)
+for n in N 
+    A0 = sprand(n, n, 0.5)      
+    b = rand(n)
+    for alpha in Alpha 
         A = A0 + alpha * I
         A = A / opnorm(A,1)
+        Time = 0
+        Residual_error = 0
+        for i in 1:10
         t = time()
         x= A\b
         t = time() - t
+        Time += t
         residual_error = norm((A*x)-b)
-        println("alpha: ", alpha, " n: ", n," time: ", t, " residual_error: ", residual_error)
+        Residual_error += residual_error
+        end
+        Time /= 10
+        Residual_error /= 10
+        println("alpha: ", alpha, " n: ", n," time: ", Time, " residual_error: ", Residual_error)
     
     end
     println()
     println()
 end
+
 
