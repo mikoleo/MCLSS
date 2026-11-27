@@ -11,8 +11,6 @@ function hw1_mv_double_gs(Q,w,k)
     return h, beta, w
 end
 
-
-
 function GMERS(A,b,m)
     n = size(b)[1]
     norm_b = norm(b)
@@ -163,71 +161,71 @@ end
 # tight_layout()
 # savefig("../Images/Question1/Eigenvalues_all.png")
 
-#Question 1.3
+# #Question 1.3
 
-Alpha =[1,100]
-M= [5,10,20,50,100]
-N=[200,500,1000]
+# Alpha =[1,100]
+# M= [5,10,20,50,100,200,500,1000]
+# N=[200,500,1000]
 
-#Faire la compilation avant pour eviter erreurs de temps d'execution
-n0 = 50
-alpha0 = 10
-m0= 5
-a0 = sprand(n0, n0, 0.5)      
-b0= rand(n0)
-a1 = a0 + alpha0 * I
-a1 = a1 / opnorm(a1,1)
-_,_= GMERS_Modified(a1,b0,m0)
-a1\b0
+# #Faire la compilation avant pour eviter erreurs de temps d'execution
+# n0 = 50
+# alpha0 = 10
+# m0= 5
+# a0 = sprand(n0, n0, 0.5)      
+# b0= rand(n0)
+# a1 = a0 + alpha0 * I
+# a1 = a1 / opnorm(a1,1)
+# _,_= GMERS_Modified(a1,b0,m0)
+# a1\b0
 
 
 
-for n in N 
-    A0 = sprand(n, n, 0.5)      
-    b = rand(n)
-    for alpha in Alpha
-        A = A0 + alpha * I
-        A = A / opnorm(A,1)
-        for m in M 
-            Time, Residual_error = 0, 0
-            for i in 1:10
-            t, residual_error = GMERS_Modified(A,b,m)
-            Time += t
-            Residual_error += residual_error
-            end
-            Time /= 10
-            Residual_error /= 10
-            println("alpha: ", alpha, " n: ", n, " m: ", m, " time: ", Time, " residual_error: ", Residual_error)  
-        end
-        println()
-    end
-    println()
-    println()
-end
-println("Backslash operator")
-for n in N 
-    A0 = sprand(n, n, 0.5)      
-    b = rand(n)
-    for alpha in Alpha 
-        A = A0 + alpha * I
-        A = A / opnorm(A,1)
-        Time = 0
-        Residual_error = 0
-        for i in 1:10
-        t = time()
-        x= A\b
-        t = time() - t
-        Time += t
-        residual_error = norm((A*x)-b)
-        Residual_error += residual_error
-        end
-        Time /= 10
-        Residual_error /= 10
-        println("alpha: ", alpha, " n: ", n," time: ", Time, " residual_error: ", Residual_error)
+# for n in N 
+#     A0 = sprand(n, n, 0.5)      
+#     b = rand(n)
+#     for alpha in Alpha
+#         A = A0 + alpha * I
+#         A = A / opnorm(A,1)
+#         for m in M 
+#             Time, Residual_error = 0, 0
+#             for i in 1:10
+#             t, residual_error = GMERS_Modified(A,b,m)
+#             Time += t
+#             Residual_error += residual_error
+#             end
+#             Time /= 10
+#             Residual_error /= 10
+#             println("alpha: ", alpha, " n: ", n, " m: ", m, " time: ", Time, " residual_error: ", Residual_error)  
+#         end
+#         println()
+#     end
+#     println()
+#     println()
+# end
+# println("Backslash operator")
+# for n in N 
+#     A0 = sprand(n, n, 0.5)      
+#     b = rand(n)
+#     for alpha in Alpha 
+#         A = A0 + alpha * I
+#         A = A / opnorm(A,1)
+#         Time = 0
+#         Residual_error = 0
+#         for i in 1:10
+#         t = time()
+#         x= A\b
+#         t = time() - t
+#         Time += t
+#         residual_error = norm((A*x)-b)
+#         Residual_error += residual_error
+#         end
+#         Time /= 10
+#         Residual_error /= 10
+#         println("alpha: ", alpha, " n: ", n," time: ", Time, " residual_error: ", Residual_error)
     
-    end
-    println()
-    println()
-end
+#     end
+#     println()
+#     println()
+# end
 
 
